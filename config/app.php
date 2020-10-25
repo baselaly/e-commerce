@@ -177,6 +177,9 @@ return [
 
         // repository provider
         App\Providers\RepositoryServiceProvider::class,
+
+        // observer provider
+        App\Providers\ObserverServiceProvider::class,
     ],
 
     /*

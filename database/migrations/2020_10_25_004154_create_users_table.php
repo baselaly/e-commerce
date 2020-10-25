@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->boolean('active')->default(true);
             $table->boolean('verified')->default(false);
             $table->string('image')->nullable();
+            $table->string('verify_code')->nullable();
             $table->timestamps();
         });
     }

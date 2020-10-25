@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Jobs\SendMailJob;
+use App\Mail\MailTemplate;
 use App\Models\User;
 use App\Repositories\User\UserInterfaceRepository;
+use Carbon\Carbon;
 
 class AuthService
 {
@@ -30,7 +33,8 @@ class AuthService
             'last_name' => request('last_name'),
             'email' => request('email'),
             'phone' => request('phone'),
-            'password' => request('password')
+            'password' => request('password'),
+            'verify_code' => uniqid() . time()
         ];
 
         return $this->userRepo->create($userData);
