@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'phone', 'email', 'active', 'verified', 'image'
+        'first_name', 'last_name', 'phone', 'email', 'active', 'verified', 'image', 'password'
     ];
 
     /**
@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function setEmailAttribute($value)
     {
-        $this->attributes['phone'] = $value;
+        $this->attributes['email'] = $value;
     }
 
     public function getEmailAttribute($value)
