@@ -94,4 +94,9 @@ class User extends Authenticatable
         }
         return asset('storage/users/' . $value);
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }
