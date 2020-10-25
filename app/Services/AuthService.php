@@ -7,13 +7,22 @@ use App\Repositories\User\UserInterfaceRepository;
 
 class AuthService
 {
+    /**
+     * @var UserInterfaceRepository
+     */
     private $userRepo;
 
+    /**
+     * @param UserInterfaceRepository $userRepo
+     */
     public function __construct(UserInterfaceRepository $userRepo)
     {
         $this->userRepo = $userRepo;
     }
 
+    /**
+     * @return User
+     */
     public function register(): User
     {
         $userData = [
