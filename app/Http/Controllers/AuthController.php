@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
 
 class AuthController extends Controller
@@ -13,7 +14,7 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register()
+    public function register(RegisterRequest $request)
     {
         return $this->authService->register();
     }
