@@ -12,4 +12,18 @@ interface UserInterfaceRepository
      * @return User
      */
     public function create(array $data): User;
+
+    /**
+     * @param array $data
+     * 
+     * @return User
+     */
+    public function getSingleBy(array $data): User;
+
+    /**
+     * @param array $data
+     * 
+     * @return bool
+     */
+    public function update(string $id, array $data): bool;
 }

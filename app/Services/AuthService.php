@@ -39,4 +39,15 @@ class AuthService
 
         return $this->userRepo->create($userData);
     }
+
+    public function activate($code): User
+    {
+        $user = $this->userRepo->getSingleBy(['code' => $code]);
+        $this->userRepo->update($user->id, [
+            'verified' => true,
+            'verify_code' => null
+        ]);
+
+        return $user;
+    }
 }

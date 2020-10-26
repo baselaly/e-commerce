@@ -33,4 +33,12 @@ class AuthController extends Controller
             return response()->json(['error' => $t->getMessage()], 500);
         }
     }
+
+    public function activate($code){
+        try {
+            return $this->authService->activate($code);
+        } catch (\Throwable $t) {
+            return response()->json(['error' => $t->getMessage()], 500);
+        }
+    }
 }

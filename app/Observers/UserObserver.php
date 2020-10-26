@@ -10,6 +10,7 @@ class UserObserver
 {
     public function created($user)
     {
+        // its created from website
         if ($user->verify_code) {
             $mailData = [
                 'subject' => 'e-mail verify',
