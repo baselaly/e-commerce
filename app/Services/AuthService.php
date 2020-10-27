@@ -7,6 +7,7 @@ use App\Mail\MailTemplate;
 use App\Models\User;
 use App\Repositories\User\UserInterfaceRepository;
 use Carbon\Carbon;
+use Tymon\JWTAuth\JWT;
 
 class AuthService
 {
@@ -38,6 +39,14 @@ class AuthService
         ];
 
         return $this->userRepo->create($userData);
+    }
+
+    public function login(): ?string
+    {
+        return auth()->attempt([
+            'email' => request('email'), 'password' => request('password'),
+            'active' => true, 'verified' => true
+        ]);
     }
 
     public function activate($code): bool
