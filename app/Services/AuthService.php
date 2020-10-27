@@ -7,8 +7,8 @@ use App\Mail\MailTemplate;
 use App\Models\ForgetPassword;
 use App\Models\User;
 use App\Repositories\User\UserInterfaceRepository;
+use App\Repositories\ForgetPassword\ForgetPasswordInterfaceRepository;
 use Carbon\Carbon;
-use Tymon\JWTAuth\JWT;
 
 class AuthService
 {
@@ -72,8 +72,10 @@ class AuthService
     public function forgetPassword(string $email): ForgetPassword
     {
         $user = $this->userRepo->getSingleBy(['email' => $email]);
+
         if (!$user->forgetPassword) {
             $user->forgetPassword()->create(['code' => uniqid()]);
+            $user->refresh();
         }
 
         $mailData = [
@@ -89,5 +91,17 @@ class AuthService
         dispatch($mailJob);
 
         return $user->forgetPassword;
+    }
+
+    /**
+     * 
+     * @return void
+     */
+    public function resetPassword(): void
+    {
+        $forgetPassword = ForgetPassword::where(['code' => request('code')])->firstOrFail();
+
+        $forgetPassword->user->update(['password' => request('password')]);
+        $forgetPassword->delete();
     }
 }

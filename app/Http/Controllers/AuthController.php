@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\ForgetPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Resources\Auth\LoginResponse;
 use App\Http\Resources\Response\ErrorResponse;
 use App\Http\Resources\Response\SuccessResponse;
@@ -84,6 +85,18 @@ class AuthController extends Controller
             return response()->json(new SuccessResponse('Reset Password E-mail sent successfully'), 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        try {
+            $this->authService->resetPassword();
+            return response()->json(new SuccessResponse('Reset Password Done successfully'), 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found, check your reset code'), 404);
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
