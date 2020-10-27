@@ -12,6 +12,7 @@ class SuccessResponse extends JsonResource
     {
         $this->message = $message;
     }
+    
     /**
      * Transform the resource into an array.
      *

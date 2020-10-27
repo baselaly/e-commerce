@@ -4,9 +4,8 @@ namespace App\Repositories\User;
 
 use App\Models\User;
 use App\QueryFilters\User\CodeFilter;
+use App\QueryFilters\User\EmailFilter;
 use Illuminate\Pipeline\Pipeline;
-use phpDocumentor\Reflection\Types\Boolean;
-use PhpParser\Node\Expr\Cast\Bool_;
 
 class UserRepository implements UserInterfaceRepository
 {
@@ -42,6 +41,7 @@ class UserRepository implements UserInterfaceRepository
             ->send($this->user->query())
             ->through([
                 new CodeFilter($data),
+                new EmailFilter($data)
             ])
             ->thenReturn()
             ->firstOrFail();

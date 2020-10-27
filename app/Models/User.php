@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Traits\UseUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 // JWT contract
@@ -120,5 +121,13 @@ class User extends Authenticatable implements JWTSubject
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function forgetPassword(): HasOne
+    {
+        return $this->hasOne('App\Models\ForgetPassword');
     }
 }

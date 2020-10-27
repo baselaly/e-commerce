@@ -4,7 +4,7 @@ namespace App\Http\Resources\Response;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ServerErrorResponse extends JsonResource
+class ErrorResponse extends JsonResource
 {
     protected $error;
 
