@@ -12,6 +12,7 @@ class LoginResponse extends JsonResource
     {
         $this->token = $token;
     }
+    
     /**
      * Transform the resource into an array.
      *

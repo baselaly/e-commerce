@@ -12,6 +12,7 @@ class ServerErrorResponse extends JsonResource
     {
         $this->error = $error;
     }
+
     /**
      * Transform the resource into an array.
      *
