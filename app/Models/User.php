@@ -131,4 +131,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne('App\Models\ForgetPassword');
     }
+
+    /**
+     * @return HasOne
+     */
+    public function store(): HasOne
+    {
+        return $this->hasOne('App\Models\Store');
+    }
 }
