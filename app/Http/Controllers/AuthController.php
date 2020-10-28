@@ -94,6 +94,11 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @param ResetPasswordRequest $request
+     * 
+     * @return [type]
+     */
     public function resetPassword(ResetPasswordRequest $request)
     {
         try {
@@ -106,6 +111,9 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @return [type]
+     */
     public function getProfile()
     {
         try {
@@ -116,6 +124,11 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @param UpdateProfileRequest $request
+     * 
+     * @return [type]
+     */
     public function updateProfile(UpdateProfileRequest $request)
     {
         try {
