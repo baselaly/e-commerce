@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Http\Traits\ApiValidationError;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ResetPasswordRequest extends FormRequest
 {
+    use ApiValidationError;
+
     /**
      * Determine if the user is authorized to make this request.
      *

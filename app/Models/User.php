@@ -6,6 +6,7 @@ use App\Http\Traits\UseUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 // JWT contract
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -104,7 +105,7 @@ class User extends Authenticatable implements JWTSubject
     public function setImageAttribute($value)
     {
         $image_name = time() . uniqid() . '.' . $value->getClientOriginalExtension();
-        if (!Storage::disk('users')->put($image_name, $value)) {
+        if (!Storage::disk('users')->put($image_name, File::get($value))) {
             throw new \Exception('error in uploading user image');
         }
         $this->attributes['image'] = $image_name;

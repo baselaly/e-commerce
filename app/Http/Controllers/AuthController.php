@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\ForgetPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Auth\UpdateProfileRequest;
 use App\Http\Resources\Auth\LoginResponse;
 use App\Http\Resources\Response\ErrorResponse;
 use App\Http\Resources\Response\SuccessResponse;
@@ -107,6 +108,16 @@ class AuthController extends Controller
     {
         try {
             $user = auth()->user();
+            return response()->json(UserResource::make($user), 200);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function updateProfile(UpdateProfileRequest $request)
+    {
+        try {
+            $user = $this->authService->update();
             return response()->json(UserResource::make($user), 200);
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);

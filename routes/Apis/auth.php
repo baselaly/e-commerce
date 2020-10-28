@@ -12,5 +12,6 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::group(['middleware' => 'userAuth'], function () {
         Route::get('/profile', [AuthController::class, 'getProfile']);
+        Route::post('/profile/update', [AuthController::class, 'updateProfile']);
     });
 });

@@ -53,8 +53,8 @@ class UserRepository implements UserInterfaceRepository
      * 
      * @return bool
      */
-    public function update(string $id, array $data): bool
+    public function update(User $user, array $data): bool
     {
-        return $this->user->where('id', $id)->update($data);
+        return $user->update($data);
     }
 }

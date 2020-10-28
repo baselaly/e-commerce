@@ -7,7 +7,6 @@ use App\Mail\MailTemplate;
 use App\Models\ForgetPassword;
 use App\Models\User;
 use App\Repositories\User\UserInterfaceRepository;
-use App\Repositories\ForgetPassword\ForgetPasswordInterfaceRepository;
 use Carbon\Carbon;
 
 class AuthService
@@ -58,7 +57,7 @@ class AuthService
     public function activate(string $code): bool
     {
         $user = $this->userRepo->getSingleBy(['code' => $code]);
-        return $this->userRepo->update($user->id, [
+        return $this->userRepo->update($user, [
             'verified' => true,
             'verify_code' => null
         ]);
@@ -103,5 +102,25 @@ class AuthService
 
         $forgetPassword->user->update(['password' => request('password')]);
         $forgetPassword->delete();
+    }
+
+    /**
+     * 
+     * @return User
+     */
+    public function update(): User
+    {
+        $data = [
+            'first_name' => request('first_name'),
+            'last_name' => request('last_name'),
+            'email' => request('email'),
+            'phone' => request('phone'),
+        ];
+        request('image') ? $data['image'] = request('image') : '';
+        request('password') ? $data['password'] = request('password') : '';
+
+        $this->userRepo->update(auth()->user(), $data);
+
+        return auth()->user();
     }
 }

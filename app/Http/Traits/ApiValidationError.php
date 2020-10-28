@@ -1,40 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Traits;
 
-use App\Http\Traits\ApiValidationError;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Resources\Response\ValidationErrorsResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
 
-class LoginRequest extends FormRequest
+/**
+ * Trait Used to format api validations error
+ */
+trait ApiValidationError
 {
-    use ApiValidationError;
-
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            'email' => 'required|email',
-            'password' => 'required'
-        ];
-    }
-
     /**
      * Handle a failed validation attempt.
      *
@@ -47,7 +24,7 @@ class LoginRequest extends FormRequest
     {
         if (request()->wantsJson()) {
             $errors = $validator->errors();
-            throw new HttpResponseException(response()->json([$errors], 422));
+            throw new HttpResponseException(response()->json(new ValidationErrorsResponse($errors), 422));
         } else {
             throw (new ValidationException($validator))
                 ->errorBag($this->errorBag)

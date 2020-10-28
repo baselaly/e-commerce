@@ -25,5 +25,5 @@ interface UserInterfaceRepository
      * 
      * @return bool
      */
-    public function update(string $id, array $data): bool;
+    public function update(User $user, array $data): bool;
 }
