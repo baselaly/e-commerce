@@ -52,6 +52,8 @@ class AuthController extends Controller
         try {
             $this->authService->activate($code);
             return response()->json(new SuccessResponse('Activated Successed'), 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
