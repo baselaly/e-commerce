@@ -6,6 +6,8 @@ use App\Http\Traits\UseUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class Store extends Model
 {
@@ -17,7 +19,7 @@ class Store extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'address', 'phone',
+        'user_id', 'name', 'address', 'phone', 'logo'
     ];
 
     public function setNameAttribute($value)
@@ -48,6 +50,23 @@ class Store extends Model
     public function getPhoneAttribute($value)
     {
         return $value;
+    }
+
+    public function setLogoAttribute($value)
+    {
+        $image_name = time() . uniqid() . '.' . $value->getClientOriginalExtension();
+        if (!Storage::disk('stores')->put($image_name, File::get($value))) {
+            throw new \Exception('error in uploading store image');
+        }
+        $this->attributes['logo'] = $image_name;
+    }
+
+    public function getLogoAttribute($value)
+    {
+        if (!$value) {
+            return asset('storage/stores/default.jpg');
+        }
+        return asset('storage/stores/' . $value);
     }
 
     /**
