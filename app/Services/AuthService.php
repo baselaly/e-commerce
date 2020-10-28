@@ -56,7 +56,10 @@ class AuthService
      */
     public function activate(string $code): bool
     {
-        $user = $this->userRepo->getSingleBy(['code' => $code]);
+        if (!$user = $this->userRepo->getSingleBy(['code' => $code])) {
+            return false;
+        }
+
         return $this->userRepo->update($user, [
             'verified' => true,
             'verify_code' => null
@@ -68,9 +71,11 @@ class AuthService
      * 
      * @return ForgetPassword
      */
-    public function forgetPassword(string $email): ForgetPassword
+    public function forgetPassword(string $email): ?ForgetPassword
     {
-        $user = $this->userRepo->getSingleBy(['email' => $email]);
+        if (!$user = $this->userRepo->getSingleBy(['email' => $email])) {
+            return null;
+        }
 
         if (!$user->forgetPassword) {
             $user->forgetPassword()->create(['code' => uniqid()]);
