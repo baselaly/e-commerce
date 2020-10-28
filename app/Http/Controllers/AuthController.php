@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Resources\Auth\LoginResponse;
 use App\Http\Resources\Response\ErrorResponse;
 use App\Http\Resources\Response\SuccessResponse;
+use App\Http\Resources\User\UserResource;
 use App\Services\AuthService;
 
 /**
@@ -97,6 +98,16 @@ class AuthController extends Controller
             return response()->json(new SuccessResponse('Reset Password Done successfully'), 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found, check your reset code'), 404);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function getProfile()
+    {
+        try {
+            $user = auth()->user();
+            return response()->json(UserResource::make($user), 200);
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
