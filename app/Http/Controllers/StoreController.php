@@ -26,9 +26,10 @@ class StoreController extends Controller
     public function createUserStore(StoreRequest $request)
     {
         try {
-            if (!$store = $this->storeService->createStore(auth()->id())) {
+            if ($store = auth()->user()->store) {
                 return response()->json(new ErrorResponse('This User already Have one store'), 403);
             }
+            $store = $this->storeService->createStore(auth()->id());
             return $store;
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);

@@ -42,7 +42,7 @@ class StoreRepository implements StoreInterfaceRepository
                 new UserIdFilter($data)
             ])
             ->thenReturn()
-            ->first();
+            ->firstOrFail();
     }
 
     /**

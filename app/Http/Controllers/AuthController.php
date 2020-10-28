@@ -50,9 +50,7 @@ class AuthController extends Controller
     public function activate($code)
     {
         try {
-            if (!$this->authService->activate($code)) {
-                return response()->json(new ErrorResponse('Not Found'), 404);
-            }
+            $this->authService->activate($code);
             return response()->json(new SuccessResponse('Activated Successed'), 200);
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
@@ -85,10 +83,10 @@ class AuthController extends Controller
     public function forgetPassword(ForgetPasswordRequest $request)
     {
         try {
-            if (!$this->authService->forgetPassword(request('email'))) {
-                return response()->json(new ErrorResponse('Not Found'), 404);
-            }
+            $this->authService->forgetPassword(request('email'));
             return response()->json(new SuccessResponse('Reset Password E-mail sent successfully'), 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }

@@ -44,7 +44,7 @@ class UserRepository implements UserInterfaceRepository
                 new EmailFilter($data)
             ])
             ->thenReturn()
-            ->first();
+            ->firstOrFail();
     }
 
     /**

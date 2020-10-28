@@ -25,12 +25,8 @@ class StoreService
      * 
      * @return Store
      */
-    public function createStore(string $userId): ?Store
+    public function createStore(string $userId): Store
     {
-        if ($this->storeRepo->getSingleBy(['user_id' => $userId])) {
-            return null;
-        }
-
         $data = [
             'name' => request('name'),
             'phone' => request('phone'),
