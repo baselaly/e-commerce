@@ -3,6 +3,7 @@
 namespace App\Repositories\Store;
 
 use App\Models\Store;
+use App\QueryFilters\Store\IdFilter;
 use App\QueryFilters\Store\UserIdFilter;
 use Illuminate\Pipeline\Pipeline;
 
@@ -39,7 +40,8 @@ class StoreRepository implements StoreInterfaceRepository
         return app(Pipeline::class)
             ->send($this->store->query())
             ->through([
-                new UserIdFilter($data)
+                new UserIdFilter($data),
+                new IdFilter($data)
             ])
             ->thenReturn()
             ->firstOrFail();
