@@ -16,6 +16,7 @@ class CreateForgetPasswordsTable extends Migration
         Schema::create('forget_passwords', function (Blueprint $table) {
             $table->uuid('id')->index()->primary();
             $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('code');
             $table->timestamps();
         });

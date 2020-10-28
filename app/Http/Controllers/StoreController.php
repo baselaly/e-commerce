@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Store\StoreRequest;
 use App\Http\Resources\Response\ErrorResponse;
-use App\Http\Resources\Response\SuccessResponse;
 use App\Http\Resources\Store\StoreResource;
 use App\Services\StoreService;
 
