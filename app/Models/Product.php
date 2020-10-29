@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image as Image;
 
 class Product extends Model
 {
@@ -19,7 +21,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'active', 'quantity', 'price'
+        'name', 'description', 'active', 'quantity', 'price', 'ownerable_type', 'ownerable_id', 'thumbnail'
     ];
 
     /**
@@ -30,11 +32,6 @@ class Product extends Model
     protected $casts = [
         'active' => 'boolean', 'quantity' => 'integer', 'price' => 'float'
     ];
-
-    /**
-     * @var array
-     */
-    protected $appends = ['thumbnail'];
 
     public function setNameAttribute($value)
     {
@@ -56,10 +53,23 @@ class Product extends Model
         return $value;
     }
 
-    public function getThumbnailAttribute()
+    public function setThumbnailAttribute($value)
     {
-        $thumbnail = $this->images()->thumbnail();
-        return asset('storage/thumbnails/' . $thumbnail->getOriginal('image'));
+        $image_name = time() . uniqid() . '.' . $value->getClientOriginalExtension();
+
+        $thumbnail = Image::make($value)->resize(400, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->encode($value->getClientOriginalExtension());
+
+        if (!Storage::disk('thumbnails')->put($image_name, $thumbnail)) {
+            throw new \Exception('error in uploading thumbnail');
+        }
+        $this->attributes['thumbnail'] = $image_name;
+    }
+
+    public function getThumbnailAttribute($value)
+    {
+        return asset('storage/thumbnails/' . $value);
     }
 
     /**
@@ -93,6 +103,6 @@ class Product extends Model
      */
     public function images(): HasMany
     {
-        return $this->hasMany('App\ProductImage');
+        return $this->hasMany('App\Models\ProductImage');
     }
 }

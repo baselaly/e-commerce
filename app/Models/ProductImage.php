@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image as Image;
 
 class ProductImage extends Model
 {
@@ -20,16 +19,7 @@ class ProductImage extends Model
      * @var array
      */
     protected $fillable = [
-        'image', 'thumbnail', 'product_id'
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'thumbnail' => 'boolean'
+        'image', 'product_id'
     ];
 
     public function setImageAttribute($value)
@@ -39,15 +29,6 @@ class ProductImage extends Model
             throw new \Exception('error in uploading store image');
         }
         $this->attributes['image'] = $image_name;
-
-        if ($this->thumbnail) {
-            // this image is thumbnail , upload it in thumbnails folder
-            $thumbnail = Image::make($value);
-            $thumbnail->resize(200, 200);
-            if (!Storage::disk('thumbnails')->put($image_name, $thumbnail)) {
-                throw new \Exception('error in uploading thumbnail');
-            }
-        }
     }
 
     public function getImageAttribute($value)
@@ -61,15 +42,5 @@ class ProductImage extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo('App\Models\Product');
-    }
-
-    /**
-     * @param mixed $query
-     * 
-     * @return [type]
-     */
-    public function scopeThumbnail($query)
-    {
-        return $query->where('thumbnail', true);
     }
 }

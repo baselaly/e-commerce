@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price');
             $table->integer('quantity');
             $table->uuidMorphs('ownerable');
+            $table->string('thumbnail');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
