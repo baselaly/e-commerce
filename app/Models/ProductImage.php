@@ -62,4 +62,14 @@ class ProductImage extends Model
     {
         return $this->belongsTo('App\Models\Product');
     }
+
+    /**
+     * @param mixed $query
+     * 
+     * @return [type]
+     */
+    public function scopeThumbnail($query)
+    {
+        return $query->where('thumbnail', true);
+    }
 }

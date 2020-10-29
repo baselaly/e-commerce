@@ -6,6 +6,7 @@ use App\Http\Traits\UseUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Product extends Model
@@ -30,6 +31,11 @@ class Product extends Model
         'active' => 'boolean', 'quantity' => 'integer', 'price' => 'float'
     ];
 
+    /**
+     * @var array
+     */
+    protected $appends = ['thumbnail'];
+
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
@@ -48,6 +54,12 @@ class Product extends Model
     public function getDescriptionAttribute($value)
     {
         return $value;
+    }
+
+    public function getThumbnailAttribute()
+    {
+        $thumbnail = $this->images()->thumbnail();
+        return asset('storage/thumbnails/' . $thumbnail->getOriginal('image'));
     }
 
     /**
@@ -74,5 +86,13 @@ class Product extends Model
     {
         return $this->belongsTo('App\Models\Store', 'ownerable_id')
             ->where('products.ownerable_type', 'App\Models\Store');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany('App\ProductImage');
     }
 }
