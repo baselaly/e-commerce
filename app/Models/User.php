@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Traits\UseUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -138,5 +139,13 @@ class User extends Authenticatable implements JWTSubject
     public function store(): HasOne
     {
         return $this->hasOne('App\Models\Store');
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function products(): MorphMany
+    {
+        return $this->morphMany('App\Models\Product', 'ownerable');
     }
 }

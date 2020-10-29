@@ -6,6 +6,7 @@ use App\Http\Traits\UseUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -75,5 +76,13 @@ class Store extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function products(): MorphMany
+    {
+        return $this->morphMany('App\Models\Product', 'ownerable');
     }
 }
