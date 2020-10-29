@@ -27,7 +27,7 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'active' => 'boolean', 'quantity' => 'integer', 'price' => 'decimal'
+        'active' => 'boolean', 'quantity' => 'integer', 'price' => 'float'
     ];
 
     public function setNameAttribute($value)
@@ -42,7 +42,7 @@ class Product extends Model
 
     public function setDescriptionAttribute($value)
     {
-        $this->attributes['address'] = $value;
+        $this->attributes['description'] = $value;
     }
 
     public function getDescriptionAttribute($value)
@@ -56,5 +56,23 @@ class Product extends Model
     public function ownerable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\User', 'ownerable_id')
+            ->where('products.ownerable_type', 'App\Models\User');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\Store', 'ownerable_id')
+            ->where('products.ownerable_type', 'App\Models\Store');
     }
 }
