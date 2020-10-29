@@ -181,7 +181,9 @@ return [
         // observer provider
         App\Providers\ObserverServiceProvider::class,
 
-        "Tymon\JWTAuth\Providers\LaravelServiceProvider"
+        "Tymon\JWTAuth\Providers\LaravelServiceProvider",
+
+        Intervention\Image\ImageServiceProvider::class
     ],
 
     /*
@@ -235,7 +237,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
-        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
+        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
+
+        'Image' => Intervention\Image\Facades\Image::class
     ],
 
 ];
