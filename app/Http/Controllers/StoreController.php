@@ -30,7 +30,7 @@ class StoreController extends Controller
             if (auth()->user()->store) {
                 return response()->json(new ErrorResponse('This User already Have one store'), 403);
             }
-            return response()->json(StoreResource::make($this->storeService->createStore(auth()->id())));
+            return response()->json(StoreResource::make($this->storeService->createStore(array_merge($request->validated(), ['user_id' => auth()->id()]))));
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
@@ -39,7 +39,7 @@ class StoreController extends Controller
     public function updateUserStore($storeId, StoreRequest $request)
     {
         try {
-            return response()->json(StoreResource::make($this->storeService->updateStore(auth()->id(), $storeId)));
+            return response()->json(StoreResource::make($this->storeService->updateStore(array_merge($request->validated(), ['user_id' => auth()->id()]), $storeId)));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {

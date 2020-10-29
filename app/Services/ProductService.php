@@ -25,15 +25,7 @@ class ProductService
     {
         $ownerable_type = $data['type'] === 'user' ? 'App\Models\User' : 'App\Models\Store';
 
-        $product = [
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'quantity' => $data['quantity'],
-            'price' => $data['price'],
-            'ownerable_type' => $ownerable_type,
-            'ownerable_id' => $data['owner_id'],
-            'thumbnail' => $data['thumbnail']
-        ];
+        $product = array_merge($data, ['ownerable_type' => $ownerable_type]);
 
         $images = array();
         foreach ($data['images'] as $image) {

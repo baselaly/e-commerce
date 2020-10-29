@@ -25,17 +25,8 @@ class StoreService
      * 
      * @return Store
      */
-    public function createStore(string $userId): Store
+    public function createStore(array $data): Store
     {
-        $data = [
-            'name' => request('name'),
-            'phone' => request('phone'),
-            'address' => request('address'),
-            'user_id' => $userId
-        ];
-
-        request('logo') ? $data['logo'] = request('logo') : '';
-
         return $this->storeRepo->create($data);
     }
 
@@ -45,22 +36,12 @@ class StoreService
      * 
      * @return bool
      */
-    public function updateStore(string $userId, string $storeId): Store
+    public function updateStore(array $data, string $storeId): Store
     {
-        $store = $this->storeRepo->getSingleBy(['user_id' => $userId, 'id' => $storeId]);
+        $userStore = $this->storeRepo->getSingleBy(['user_id' => $data['user_id'], 'id' => $storeId]);
 
-        $data = [
-            'name' => request('name'),
-            'phone' => request('phone'),
-            'address' => request('address'),
-            'user_id' => $userId
-        ];
-
-        request('logo') ? $data['logo'] = request('logo') : '';
-
-        $this->storeRepo->update($store, $data);
-        $store->refresh();
-
-        return $store;
+        $this->storeRepo->update($userStore, $data);
+        $userStore->refresh();
+        return $userStore;
     }
 }
