@@ -12,4 +12,11 @@ interface ProductInterfaceRepository
      * @return Product
      */
     public function create(array $data): Product;
+
+    /**
+     * @param array $data
+     * 
+     * @return Product
+     */
+    public function getSingleBy(array $data): Product;
 }

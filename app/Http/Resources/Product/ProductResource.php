@@ -15,13 +15,13 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'name' => (string)$this->name,
-            'description' => (string)$this->description,
-            'quantity' => (int)$this->quantity,
-            'price' => (float)$this->price,
+            'name' => (string) $this->name,
+            'description' => (string) $this->description,
+            'quantity' => (int) $this->quantity,
+            'price' => (float) $this->price,
             'images' => (array) $this->images->pluck('image')->toArray(),
-            'thumbnail' => (string)$this->thumbnail,
-            'active' => (bool)$this->active
+            'thumbnail' => (string) $this->thumbnail,
+            'active' => (bool) $this->active
         ];
     }
 }
