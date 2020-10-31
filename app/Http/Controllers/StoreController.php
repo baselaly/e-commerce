@@ -39,7 +39,8 @@ class StoreController extends Controller
     public function updateUserStore($storeId, StoreRequest $request)
     {
         try {
-            return response()->json(StoreResource::make($this->storeService->updateStore(array_merge($request->validated(), ['user_id' => auth()->id()]), $storeId)));
+            $store = $this->storeService->getUserStore($storeId, auth()->id());
+            return response()->json(StoreResource::make($this->storeService->updateStore($store, $request->validated())));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {

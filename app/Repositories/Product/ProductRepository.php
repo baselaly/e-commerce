@@ -48,4 +48,9 @@ class ProductRepository implements ProductInterfaceRepository
             ->thenReturn()
             ->firstOrFail();
     }
+
+    public function update(Product $product, array $data): bool
+    {
+        return $product->update($data);
+    }
 }

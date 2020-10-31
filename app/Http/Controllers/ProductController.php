@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Response\ErrorResponse;
 use App\Services\ProductService;
@@ -47,6 +48,19 @@ class ProductController extends Controller
     {
         try {
             return response()->json(ProductResource::make($this->productService->getProduct($id)), 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
+            DB::rollBack();
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function updateProduct($id, UpdateProductRequest $request)
+    {
+        try {
+            $product = $this->productService->getOwnerProduct($id, auth()->id());
+            return response()->json(ProductResource::make($this->productService->update($product, $request->validated())), 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {

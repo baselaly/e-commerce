@@ -57,4 +57,17 @@ class ProductService
     {
         return $this->productRepo->getSingleBy(['id' => $productId, 'active' => true]);
     }
+
+    /**
+     * @param array $data
+     * @param Product $product
+     * 
+     * @return Product
+     */
+    public function update(Product $product, array $data): Product
+    {
+        $this->productRepo->update($product, $data);
+        $product->refresh();
+        return $product;
+    }
 }

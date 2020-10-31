@@ -31,17 +31,26 @@ class StoreService
     }
 
     /**
-     * @param string $userId
      * @param string $storeId
+     * @param string $userId
      * 
-     * @return bool
+     * @return Store
      */
-    public function updateStore(array $data, string $storeId): Store
+    public function getUserStore(string $storeId, string $userId): Store
     {
-        $userStore = $this->storeRepo->getSingleBy(['user_id' => $data['user_id'], 'id' => $storeId]);
+        return $this->storeRepo->getSingleBy(['user_id' => $userId, 'id' => $storeId]);
+    }
 
-        $this->storeRepo->update($userStore, $data);
-        $userStore->refresh();
-        return $userStore;
+    /**
+     * @param Store $store
+     * @param array $data
+     * 
+     * @return Store
+     */
+    public function updateStore(Store $store, array $data): Store
+    {
+        $this->storeRepo->update($store, $data);
+        $store->refresh();
+        return $store;
     }
 }

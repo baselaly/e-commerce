@@ -19,4 +19,12 @@ interface ProductInterfaceRepository
      * @return Product
      */
     public function getSingleBy(array $data): Product;
+
+    /**
+     * @param Product $product
+     * @param array $data
+     * 
+     * @return bool
+     */
+    public function update(Product $product, array $data): bool;
 }
