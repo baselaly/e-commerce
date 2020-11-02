@@ -72,4 +72,16 @@ class ProductController extends Controller
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
     }
+
+    public function changeProductStatus($id)
+    {
+        try {
+            $product = $this->productService->getOwnerProduct($id, auth()->id());
+            return response()->json(ProductResource::make($this->productService->update($product, ['active' => !$product->active])), 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
 }
