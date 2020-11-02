@@ -3,6 +3,7 @@
 namespace App\Repositories\Product;
 
 use App\Models\Product;
+use App\QueryFilters\Product\ActiveFilter;
 use App\QueryFilters\Product\IdFilter;
 use App\QueryFilters\Product\OwnerFilter;
 use App\QueryFilters\Product\StoreFilter;
@@ -45,10 +46,11 @@ class ProductRepository implements ProductInterfaceRepository
             ->through([
                 new IdFilter($data),
                 new OwnerFilter($data),
-                new StoreFilter($data)
+                new StoreFilter($data),
+                new ActiveFilter($data)
             ])
             ->thenReturn()
-            ->firstOrFail();
+            ->latest()->firstOrFail();
     }
 
     public function update(Product $product, array $data): bool
