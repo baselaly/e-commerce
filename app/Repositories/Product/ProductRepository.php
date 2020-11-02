@@ -5,6 +5,7 @@ namespace App\Repositories\Product;
 use App\Models\Product;
 use App\QueryFilters\Product\IdFilter;
 use App\QueryFilters\Product\OwnerFilter;
+use App\QueryFilters\Product\StoreFilter;
 use Illuminate\Pipeline\Pipeline;
 
 class ProductRepository implements ProductInterfaceRepository
@@ -43,7 +44,8 @@ class ProductRepository implements ProductInterfaceRepository
             ->send($this->product->query())
             ->through([
                 new IdFilter($data),
-                new OwnerFilter($data)
+                new OwnerFilter($data),
+                new StoreFilter($data)
             ])
             ->thenReturn()
             ->firstOrFail();

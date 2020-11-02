@@ -9,6 +9,7 @@ Route::group(['prefix' => 'products', 'middleware' => 'userAuth'], function () {
     Route::get('owner/{id}', [ProductController::class, 'getOwnerProduct']);
     Route::get('/{id}', [ProductController::class, 'getProduct']);
     Route::post('/{id}', [ProductController::class, 'updateProduct']);
-    Route::delete('/image/{id}',[ProductImageController::class, 'delete']);
+    Route::delete('/image/{id}', [ProductImageController::class, 'delete']);
     Route::get('changeState/{id}', [ProductController::class, 'changeProductStatus']);
+    Route::get('featured/{id}', [ProductController::class, 'changeFeatured'])->middleware('storeAuth');
 });

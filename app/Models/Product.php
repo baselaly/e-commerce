@@ -21,7 +21,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'active', 'quantity', 'price', 'ownerable_type', 'ownerable_id', 'thumbnail'
+        'name', 'description', 'active', 'quantity', 'price', 'ownerable_type', 'ownerable_id', 'thumbnail', 'featured'
     ];
 
     /**
@@ -30,7 +30,7 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'active' => 'boolean', 'quantity' => 'integer', 'price' => 'float'
+        'active' => 'boolean', 'quantity' => 'integer', 'price' => 'float', 'featured' => 'boolean'
     ];
 
     public function setNameAttribute($value)

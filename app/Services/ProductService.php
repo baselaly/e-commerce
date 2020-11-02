@@ -38,24 +38,13 @@ class ProductService
     }
 
     /**
-     * @param string $productId
-     * @param string $userId
+     * @param array $data
      * 
      * @return Product
      */
-    public function getOwnerProduct(string $productId, string $userId): Product
+    public function getSingleProductBy(array $data = []): Product
     {
-        return $this->productRepo->getSingleBy(['id' => $productId, 'owner_id' => $userId]);
-    }
-
-    /**
-     * @param string $productId
-     * 
-     * @return Product
-     */
-    public function getProduct(string $productId): Product
-    {
-        return $this->productRepo->getSingleBy(['id' => $productId, 'active' => true]);
+        return $this->productRepo->getSingleBy($data);
     }
 
     /**

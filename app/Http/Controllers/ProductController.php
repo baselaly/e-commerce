@@ -35,7 +35,7 @@ class ProductController extends Controller
     public function getOwnerProduct($id)
     {
         try {
-            return response()->json(ProductResource::make($this->productService->getOwnerProduct($id, auth()->id())), 200);
+            return response()->json(ProductResource::make($this->productService->getSingleProductBy(['id' => $id, 'owner_id' => auth()->id])), 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
@@ -46,7 +46,7 @@ class ProductController extends Controller
     public function getProduct($id)
     {
         try {
-            return response()->json(ProductResource::make($this->productService->getProduct($id)), 200);
+            return response()->json(ProductResource::make($this->productService->getSingleProductBy(['id' => $id, 'active' => true])), 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
@@ -58,7 +58,7 @@ class ProductController extends Controller
     {
         try {
             DB::beginTransaction();
-            $product = $this->productService->getOwnerProduct($id, auth()->id());
+            $product = $this->productService->getSingleProductBy(['id' => $id, 'owner_id' => auth()->id()]);
             if (request('images') && count(request('images')) + $product->images->count() > 5) {
                 return response()->json(new ErrorResponse('There will be more than 5 images for this product'), 403);
             }
@@ -76,8 +76,20 @@ class ProductController extends Controller
     public function changeProductStatus($id)
     {
         try {
-            $product = $this->productService->getOwnerProduct($id, auth()->id());
+            $product = $this->productService->getSingleProductBy(['id' => $id, 'owner_id' => auth()->id()]);
             return response()->json(ProductResource::make($this->productService->update($product, ['active' => !$product->active])), 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function changeFeatured($id)
+    {
+        try {
+            $product = $this->productService->getSingleProductBy(['id' => $id, 'store_id' => auth()->user()->store->id]);
+            return response()->json(ProductResource::make($this->productService->update($product, ['featured' => !$product->featured])), 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {

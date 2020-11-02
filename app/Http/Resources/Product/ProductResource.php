@@ -21,7 +21,8 @@ class ProductResource extends JsonResource
             'price' => (float) $this->price,
             'images' => (array) $this->images->pluck('image')->toArray(),
             'thumbnail' => (string) $this->thumbnail,
-            'active' => (bool) $this->active
+            'active' => (bool) $this->active,
+            'featured' => (bool) $this->featured
         ];
     }
 }
