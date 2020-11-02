@@ -67,6 +67,14 @@ class ProductService
     public function update(Product $product, array $data): Product
     {
         $this->productRepo->update($product, $data);
+        $images = array();
+        if (isset($data['images'])) {
+            foreach ($data['images'] as $image) {
+                $images[]['image'] = $image;
+            }
+
+            $product->images()->createMany($images);
+        }
         $product->refresh();
         return $product;
     }

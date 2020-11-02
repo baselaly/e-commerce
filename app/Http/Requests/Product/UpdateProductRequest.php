@@ -32,6 +32,10 @@ class UpdateProductRequest extends FormRequest
 
         request('thumbnail') ? $rules['thumbnail'] = 'required|image|mimes:png,jpg,jpeg|max:5000' : '';
 
+        request('images') ?
+            ($rules['images'] = 'array|min:1') && ($rules['images.*'] = 'image|mimes:jpg,jpeg,png|max:5000')
+            : '';
+
         return $rules;
     }
 }

@@ -39,7 +39,6 @@ class ProductController extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
-            DB::rollBack();
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
     }
@@ -51,7 +50,6 @@ class ProductController extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
-            DB::rollBack();
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
     }
@@ -59,8 +57,14 @@ class ProductController extends Controller
     public function updateProduct($id, UpdateProductRequest $request)
     {
         try {
+            DB::beginTransaction();
             $product = $this->productService->getOwnerProduct($id, auth()->id());
-            return response()->json(ProductResource::make($this->productService->update($product, $request->validated())), 200);
+            if (request('images') && count(request('images')) + $product->images->count() > 5) {
+                return response()->json(new ErrorResponse('There will be more than 5 images for this product'), 403);
+            }
+            $product = $this->productService->update($product, $request->validated());
+            DB::commit();
+            return response()->json(ProductResource::make($product), 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
