@@ -52,4 +52,15 @@ class StoreService
         $store->refresh();
         return $store;
     }
+
+    /**
+     * @param array $filters
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getStores(array $filters = [], int $perPage = 10)
+    {
+        return $this->storeRepo->getAll($filters, $perPage);
+    }
 }

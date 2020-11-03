@@ -27,4 +27,12 @@ interface StoreInterfaceRepository
      * @return bool
      */
     public function update(Store $user, array $data): bool;
+
+    /**
+     * @param array $filters
+     * @param int $perPage
+     * 
+     * @return [type]
+     */
+    public function getAll(array $filters = [], int $perPage = 10);
 }

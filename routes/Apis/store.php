@@ -8,4 +8,5 @@ Route::group(['prefix' => 'stores', 'middleware' => 'userAuth'], function () {
     Route::post('/{id}', [StoreController::class, 'updateUserStore'])->name('store.update');
     Route::get('/{id}', [StoreController::class, 'getStore']);
     Route::get('/my/store', [StoreController::class, 'getMyStore']);
+    Route::get('/', [StoreController::class, 'getStores']);
 });

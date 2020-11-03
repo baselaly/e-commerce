@@ -30,6 +30,7 @@ interface ProductInterfaceRepository
 
     /**
      * @param array $filters
+     * @param int $perPage
      * 
      * @return [type]
      */

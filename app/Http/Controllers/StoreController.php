@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Store\StoreRequest;
 use App\Http\Resources\Response\ErrorResponse;
+use App\Http\Resources\Store\StoreCollection;
 use App\Http\Resources\Store\StoreResource;
 use App\Services\StoreService;
 
@@ -65,6 +66,15 @@ class StoreController extends Controller
             return response()->json(StoreResource::make($this->storeService->getSingleStoreBy(['user_id' => auth()->id()])));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function getStores()
+    {
+        try {
+            return StoreCollection::collection($this->storeService->getStores());
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }

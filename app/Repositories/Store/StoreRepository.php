@@ -57,4 +57,22 @@ class StoreRepository implements StoreInterfaceRepository
     {
         return $store->update($data);
     }
+
+    /**
+     * @param array $filters
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getAll(array $filters = [], int $perPage = 10)
+    {
+        return app(Pipeline::class)
+        ->send($this->store->query())
+        ->through([
+            new UserIdFilter($filters),
+            new IdFilter($filters)
+        ])
+        ->thenReturn()
+        ->latest()->paginate($perPage);
+    }
 }
