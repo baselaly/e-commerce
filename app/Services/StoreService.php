@@ -31,14 +31,13 @@ class StoreService
     }
 
     /**
-     * @param string $storeId
-     * @param string $userId
+     * @param array $data
      * 
      * @return Store
      */
-    public function getUserStore(string $storeId, string $userId): Store
+    public function getSingleStoreBy(array $data = []): Store
     {
-        return $this->storeRepo->getSingleBy(['user_id' => $userId, 'id' => $storeId]);
+        return $this->storeRepo->getSingleBy($data);
     }
 
     /**
