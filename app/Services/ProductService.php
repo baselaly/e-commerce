@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Repositories\Product\ProductInterfaceRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductService
 {
@@ -67,5 +68,16 @@ class ProductService
         }
         $product->refresh();
         return $product;
+    }
+
+    /**
+     * @param array $filters
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getProducts(array $filters = [], int $perPage = 10)
+    {
+        return $this->productRepo->getAll($filters, $perPage);
     }
 }

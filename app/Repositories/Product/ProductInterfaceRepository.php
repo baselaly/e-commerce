@@ -27,4 +27,11 @@ interface ProductInterfaceRepository
      * @return bool
      */
     public function update(Product $product, array $data): bool;
+
+    /**
+     * @param array $filters
+     * 
+     * @return [type]
+     */
+    public function getAll(array $filters = [], int $perPage = 10);
 }

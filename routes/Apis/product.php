@@ -12,4 +12,8 @@ Route::group(['prefix' => 'products', 'middleware' => 'userAuth'], function () {
     Route::delete('/image/{id}', [ProductImageController::class, 'delete']);
     Route::get('changeState/{id}', [ProductController::class, 'changeProductStatus']);
     Route::get('featured/{id}', [ProductController::class, 'changeFeatured'])->middleware('storeAuth');
+
+    Route::get('/', [ProductController::class, 'getProducts']);
+    Route::get('/store/{storeId}', [ProductController::class, 'getStoreProducts']);
+    Route::get('/user/{userId}', [ProductController::class, 'getUserProducts']);
 });

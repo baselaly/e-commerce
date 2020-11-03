@@ -7,6 +7,7 @@ use App\QueryFilters\Product\ActiveFilter;
 use App\QueryFilters\Product\IdFilter;
 use App\QueryFilters\Product\OwnerFilter;
 use App\QueryFilters\Product\StoreFilter;
+use App\QueryFilters\Product\UserFilter;
 use Illuminate\Pipeline\Pipeline;
 
 class ProductRepository implements ProductInterfaceRepository
@@ -47,14 +48,42 @@ class ProductRepository implements ProductInterfaceRepository
                 new IdFilter($data),
                 new OwnerFilter($data),
                 new StoreFilter($data),
-                new ActiveFilter($data)
+                new ActiveFilter($data),
+                new UserFilter($data)
             ])
             ->thenReturn()
             ->latest()->firstOrFail();
     }
 
+    /**
+     * @param Product $product
+     * @param array $data
+     * 
+     * @return bool
+     */
     public function update(Product $product, array $data): bool
     {
         return $product->update($data);
+    }
+
+    /**
+     * @param array $filters
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getAll(array $filters = [], int $perPage = 10)
+    {
+        return app(Pipeline::class)
+            ->send($this->product->query())
+            ->through([
+                new IdFilter($filters),
+                new OwnerFilter($filters),
+                new StoreFilter($filters),
+                new ActiveFilter($filters),
+                new UserFilter($filters)
+            ])
+            ->thenReturn()
+            ->latest()->paginate($perPage);
     }
 }
