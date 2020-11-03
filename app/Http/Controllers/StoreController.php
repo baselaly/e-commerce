@@ -36,11 +36,33 @@ class StoreController extends Controller
         }
     }
 
-    public function updateUserStore($storeId, StoreRequest $request)
+    public function updateUserStore($id, StoreRequest $request)
     {
         try {
-            $store = $this->storeService->getSingleStoreBy(['id' => $storeId, 'user_id' => auth()->id()]);
+            $store = $this->storeService->getSingleStoreBy(['id' => $id, 'user_id' => auth()->id()]);
             return response()->json(StoreResource::make($this->storeService->updateStore($store, $request->validated())));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function getStore($id)
+    {
+        try {
+            return response()->json(StoreResource::make($this->storeService->getSingleStoreBy(['id' => $id])));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function getMyStore()
+    {
+        try {
+            return response()->json(StoreResource::make($this->storeService->getSingleStoreBy(['user_id' => auth()->id()])));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
