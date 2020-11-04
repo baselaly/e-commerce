@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Cart\CartStoreRequest;
+use App\Http\Resources\Cart\CartResource;
+use App\Http\Resources\Response\ErrorResponse;
 use App\Services\CartService;
+use App\Services\ProductService;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -14,8 +18,20 @@ class CartController extends Controller
         $this->cartService = $cartService;
     }
 
-    public function store(CartStoreRequest $request)
+    public function store(CartStoreRequest $request, ProductService $productService)
     {
-        return $request->all();
+        try {
+            DB::beginTransaction();
+            $product = $productService->getSingleProductBy(['id' => $request->product_id]);
+            if ($product->quantity < $request->quantity) {
+                return response()->json(new ErrorResponse('Ordered Quantity is more than Product Quantity'), 403);
+            }
+            $cart = $this->cartService->addToCart(array_merge($request->validated(), ['user_id' => auth()->id()]));
+            DB::commit();
+            return response()->json(CartResource::make($cart));
+        } catch (\Throwable $t) {
+            DB::rollBack();
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
     }
 }

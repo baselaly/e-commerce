@@ -21,12 +21,15 @@ class CartService
     }
 
     /**
+     * @param Product $product
      * @param array $data
      * 
      * @return Cart
      */
     public function addToCart(array $data): Cart
     {
-        return $this->cartRepo->create($data);
+        $cart = $this->cartRepo->create($data);
+        $cart->product->decrement('quantity', $data['quantity']);
+        return $cart;
     }
 }
