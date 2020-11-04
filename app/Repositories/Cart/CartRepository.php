@@ -3,6 +3,7 @@
 namespace App\Repositories\Cart;
 
 use App\Models\Cart;
+use App\QueryFilters\Cart\IdFilter;
 use App\QueryFilters\Cart\ProductFilter;
 use App\QueryFilters\Cart\UserFilter;
 use Illuminate\Pipeline\Pipeline;
@@ -42,6 +43,7 @@ class CartRepository implements CartInterfaceRepository
         return app(Pipeline::class)
             ->send($this->cart->query())
             ->through([
+                new IdFilter($data),
                 new UserFilter($data),
                 new ProductFilter($data)
             ])
@@ -71,6 +73,7 @@ class CartRepository implements CartInterfaceRepository
         return app(Pipeline::class)
             ->send($this->cart->query())
             ->through([
+                new IdFilter($filters),
                 new UserFilter($filters),
                 new ProductFilter($filters)
             ])

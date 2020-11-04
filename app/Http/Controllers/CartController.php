@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Cart\CartStoreRequest;
+use App\Http\Requests\Cart\CartUpdateRequest;
 use App\Http\Resources\Cart\CartResource;
 use App\Http\Resources\Response\ErrorResponse;
 use App\Services\CartService;
@@ -22,11 +23,29 @@ class CartController extends Controller
     {
         try {
             DB::beginTransaction();
-            $product = $productService->getSingleProductBy(['id' => $request->product_id]);
+            $product = $productService->getSingleProductBy(['id' => $request->product_id, 'active' => true]);
             if ($product->quantity < $request->quantity) {
                 return response()->json(new ErrorResponse('Ordered Quantity is more than Product Quantity'), 403);
             }
             $cart = $this->cartService->addToCart(array_merge($request->validated(), ['user_id' => auth()->id()]));
+            DB::commit();
+            return response()->json(CartResource::make($cart));
+        } catch (\Throwable $t) {
+            DB::rollBack();
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function update($id, CartUpdateRequest $request, ProductService $productService)
+    {
+        try {
+            DB::beginTransaction();
+            $cart = $this->cartService->getSingleCartBy(['id' => $id, 'user_id' => auth()->id()]);
+            $product = $productService->getSingleProductBy(['id' => $cart->product_id, 'active' => true]);
+            if ($product->quantity + $cart->quantity < $request->quantity) {
+                return response()->json(new ErrorResponse('Ordered Quantity is more than Product Quantity'), 403);
+            }
+            $cart = $this->cartService->updateCart($cart, $request->validated());
             DB::commit();
             return response()->json(CartResource::make($cart));
         } catch (\Throwable $t) {
