@@ -20,6 +20,10 @@ class Cart extends Model
         'user_id', 'product_id', 'quantity'
     ];
 
+    protected $with = ['product'];
+
+    protected $appends = ['total'];
+
     /**
      * @return BelongsTo
      */
@@ -34,5 +38,10 @@ class Cart extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo('App\Models\Product');
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->product->price * $this->quantity;
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Http\Traits\ApiValidationError;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
 {
+    use ApiValidationError;
+
     /**
      * Determine if the user is authorized to make this request.
      *

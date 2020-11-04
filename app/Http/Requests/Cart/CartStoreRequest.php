@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Store;
+namespace App\Http\Requests\Cart;
 
 use App\Http\Traits\ApiValidationError;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class CartStoreRequest extends FormRequest
 {
     use ApiValidationError;
 
@@ -26,13 +26,9 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'name' => 'required|max:250',
-            'address' => 'required|max:500',
-            'phone' => 'required|max:15',
+        return [
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1|digits_between:1,2'
         ];
-
-        request('logo') ? $rules['logo'] = 'image|mimes:jpg,jpeg,png' : '';
-        return $rules;
     }
 }
