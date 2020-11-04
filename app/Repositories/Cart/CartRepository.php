@@ -3,6 +3,8 @@
 namespace App\Repositories\Cart;
 
 use App\Models\Cart;
+use App\QueryFilters\Cart\ProductFilter;
+use App\QueryFilters\Cart\UserFilter;
 use Illuminate\Pipeline\Pipeline;
 
 class CartRepository implements CartInterfaceRepository
@@ -39,7 +41,10 @@ class CartRepository implements CartInterfaceRepository
     {
         return app(Pipeline::class)
             ->send($this->cart->query())
-            ->through([])
+            ->through([
+                new UserFilter($data),
+                new ProductFilter($data)
+            ])
             ->thenReturn()
             ->latest()->firstOrFail();
     }
@@ -65,7 +70,10 @@ class CartRepository implements CartInterfaceRepository
     {
         return app(Pipeline::class)
             ->send($this->cart->query())
-            ->through([])
+            ->through([
+                new UserFilter($filters),
+                new ProductFilter($filters)
+            ])
             ->thenReturn()
             ->latest()->paginate($perPage);
     }
