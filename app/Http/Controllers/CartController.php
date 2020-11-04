@@ -36,13 +36,12 @@ class CartController extends Controller
         }
     }
 
-    public function update($id, CartUpdateRequest $request, ProductService $productService)
+    public function update($id, CartUpdateRequest $request)
     {
         try {
             DB::beginTransaction();
             $cart = $this->cartService->getSingleCartBy(['id' => $id, 'user_id' => auth()->id()]);
-            $product = $productService->getSingleProductBy(['id' => $cart->product_id, 'active' => true]);
-            if ($product->quantity + $cart->quantity < $request->quantity) {
+            if ($cart->product->quantity + $cart->quantity < $request->quantity) {
                 return response()->json(new ErrorResponse('Ordered Quantity is more than Product Quantity'), 403);
             }
             $cart = $this->cartService->updateCart($cart, $request->validated());
