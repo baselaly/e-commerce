@@ -69,4 +69,8 @@ class CartService
 
         return $cart;
     }
+
+    public function deleteCart(Cart $cart)
+    {
+    }
 }

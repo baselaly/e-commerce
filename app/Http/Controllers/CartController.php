@@ -47,8 +47,23 @@ class CartController extends Controller
             $cart = $this->cartService->updateCart($cart, $request->validated());
             DB::commit();
             return response()->json(CartResource::make($cart));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
             DB::rollBack();
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $cart = $this->cartService->getSingleCartBy(['id' => $id, 'user_id' => auth()->id()]);
+            $this->cartService->deleteCart($cart);
+            return response()->json(CartResource::make($cart));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(new ErrorResponse('Not Found'), 404);
+        } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
     }

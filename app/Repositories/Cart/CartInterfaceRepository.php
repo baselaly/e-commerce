@@ -35,4 +35,11 @@ interface CartInterfaceRepository
      * @return [type]
      */
     public function getAll(array $filters = [], int $perPage = 10);
+
+    /**
+     * @param Cart $cart
+     * 
+     * @return bool
+     */
+    public function delete(Cart $cart): bool;
 }

@@ -80,4 +80,9 @@ class CartRepository implements CartInterfaceRepository
             ->thenReturn()
             ->latest()->paginate($perPage);
     }
+
+    public function delete(Cart $cart): bool
+    {
+        return $cart->delete();
+    }
 }
