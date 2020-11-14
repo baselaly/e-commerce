@@ -48,6 +48,7 @@ class CartController extends Controller
             DB::commit();
             return response()->json(CartResource::make($cart));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollBack();
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
             DB::rollBack();
@@ -58,12 +59,16 @@ class CartController extends Controller
     public function delete($id)
     {
         try {
+            DB::beginTransaction();
             $cart = $this->cartService->getSingleCartBy(['id' => $id, 'user_id' => auth()->id()]);
             $this->cartService->deleteCart($cart);
+            DB::commit();
             return response()->json(CartResource::make($cart));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollBack();
             return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
+            DB::rollBack();
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
     }

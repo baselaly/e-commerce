@@ -70,7 +70,11 @@ class CartService
         return $cart;
     }
 
-    public function deleteCart(Cart $cart)
+    public function deleteCart(Cart $cart): Cart
     {
+        $product = $cart->product;
+        $product->increment('quantity', $cart->quantity);
+        $this->cartRepo->delete($cart);
+        return $cart;
     }
 }
