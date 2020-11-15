@@ -25,6 +25,7 @@ class CheckoutController extends Controller
     {
         try {
             $carts = $cartService->getCartsBy(['user_id' => auth()->id()]);
+            $this->checkoutService->checkout($carts, auth()->id());
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }

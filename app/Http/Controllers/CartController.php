@@ -30,6 +30,9 @@ class CartController extends Controller
             $cart = $this->cartService->addToCart(array_merge($request->validated(), ['user_id' => auth()->id()]));
             DB::commit();
             return response()->json(CartResource::make($cart));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollBack();
+            return response()->json(new ErrorResponse('Not Found'), 404);
         } catch (\Throwable $t) {
             DB::rollBack();
             return response()->json(new ErrorResponse($t->getMessage()), 500);
