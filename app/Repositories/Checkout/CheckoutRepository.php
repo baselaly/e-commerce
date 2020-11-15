@@ -64,13 +64,14 @@ class CheckoutRepository implements CheckoutInterfaceRepository
      * 
      * @return [type]
      */
-    public function getAll(array $filters = [], int $perPage = 10)
+    public function getAll(array $filters = [], int $perPage = 0)
     {
-        return app(Pipeline::class)
+        $checkouts = app(Pipeline::class)
             ->send($this->Checkout->query())
             ->through([])
             ->thenReturn()
-            ->latest()->paginate($perPage);
+            ->latest();
+        return $perPage ? $checkouts->paginate($perPage) : $checkouts->get();
     }
 
     /**

@@ -101,7 +101,7 @@ class ProductController extends Controller
     public function getProducts()
     {
         try {
-            return ProductCollection::collection($this->productService->getProducts(['active' => true]));
+            return ProductCollection::collection($this->productService->getProducts(['active' => true], $perPage = 10));
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
@@ -110,7 +110,7 @@ class ProductController extends Controller
     public function getUserProducts($userId)
     {
         try {
-            return ProductCollection::collection($this->productService->getProducts(['active' => true, 'user_id' => $userId]));
+            return ProductCollection::collection($this->productService->getProducts(['active' => true, 'user_id' => $userId], $perPage = 10));
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
@@ -119,7 +119,7 @@ class ProductController extends Controller
     public function getStoreProducts($storeId)
     {
         try {
-            return ProductCollection::collection($this->productService->getProducts(['active' => true, 'store_id' => $storeId]));
+            return ProductCollection::collection($this->productService->getProducts(['active' => true, 'store_id' => $storeId], $perPage = 10));
         } catch (\Throwable $t) {
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }

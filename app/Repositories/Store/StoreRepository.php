@@ -64,15 +64,17 @@ class StoreRepository implements StoreInterfaceRepository
      * 
      * @return [type]
      */
-    public function getAll(array $filters = [], int $perPage = 10)
+    public function getAll(array $filters = [], int $perPage = 0)
     {
-        return app(Pipeline::class)
-        ->send($this->store->query())
-        ->through([
-            new UserIdFilter($filters),
-            new IdFilter($filters)
-        ])
-        ->thenReturn()
-        ->latest()->paginate($perPage);
+        $stores = app(Pipeline::class)
+            ->send($this->store->query())
+            ->through([
+                new UserIdFilter($filters),
+                new IdFilter($filters)
+            ])
+            ->thenReturn()
+            ->latest();
+
+        return $perPage ? $stores->paginate($perPage) : $stores->get();
     }
 }

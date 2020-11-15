@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Traits\UseUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -147,5 +148,13 @@ class User extends Authenticatable implements JWTSubject
     public function products(): MorphMany
     {
         return $this->morphMany('App\Models\Product', 'ownerable');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function carts(): HasMany
+    {
+        return $this->hasMany('App\Models\Cart');
     }
 }

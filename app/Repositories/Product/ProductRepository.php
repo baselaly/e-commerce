@@ -72,9 +72,9 @@ class ProductRepository implements ProductInterfaceRepository
      * 
      * @return [type]
      */
-    public function getAll(array $filters = [], int $perPage = 10)
+    public function getAll(array $filters = [], int $perPage = 0)
     {
-        return app(Pipeline::class)
+        $products = app(Pipeline::class)
             ->send($this->product->query())
             ->through([
                 new IdFilter($filters),
@@ -84,6 +84,8 @@ class ProductRepository implements ProductInterfaceRepository
                 new UserFilter($filters)
             ])
             ->thenReturn()
-            ->latest()->paginate($perPage);
+            ->latest();
+
+        return $perPage ? $products->paginate($perPage) : $products->get();
     }
 }

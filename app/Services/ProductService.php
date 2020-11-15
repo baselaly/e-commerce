@@ -76,7 +76,7 @@ class ProductService
      * 
      * @return [type]
      */
-    public function getProducts(array $filters = [], int $perPage = 10)
+    public function getProducts(array $filters = [], int $perPage = 0)
     {
         return $this->productRepo->getAll($filters, $perPage);
     }

@@ -70,11 +70,26 @@ class CartService
         return $cart;
     }
 
+    /**
+     * @param Cart $cart
+     * 
+     * @return Cart
+     */
     public function deleteCart(Cart $cart): Cart
     {
         $product = $cart->product;
         $product->increment('quantity', $cart->quantity);
         $this->cartRepo->delete($cart);
         return $cart;
+    }
+
+    /**
+     * @param array $data=[]
+     * 
+     * @return [type]
+     */
+    public function getCartsBy(array $data = [])
+    {
+        return $this->cartRepo->getAll($data);
     }
 }

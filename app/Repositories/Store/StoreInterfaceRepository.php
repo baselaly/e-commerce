@@ -34,5 +34,5 @@ interface StoreInterfaceRepository
      * 
      * @return [type]
      */
-    public function getAll(array $filters = [], int $perPage = 10);
+    public function getAll(array $filters = [], int $perPage = 0);
 }

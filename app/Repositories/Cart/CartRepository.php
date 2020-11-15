@@ -68,9 +68,9 @@ class CartRepository implements CartInterfaceRepository
      * 
      * @return [type]
      */
-    public function getAll(array $filters = [], int $perPage = 10)
+    public function getAll(array $filters = [], int $perPage = 0)
     {
-        return app(Pipeline::class)
+        $carts = app(Pipeline::class)
             ->send($this->cart->query())
             ->through([
                 new IdFilter($filters),
@@ -78,7 +78,8 @@ class CartRepository implements CartInterfaceRepository
                 new ProductFilter($filters)
             ])
             ->thenReturn()
-            ->latest()->paginate($perPage);
+            ->latest();
+        return $perPage ? $carts->paginate($perPage) : $carts->get();
     }
 
     /**
