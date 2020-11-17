@@ -2,31 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Checkout\ExecutePaymentRequest;
+use App\Http\Requests\Checkout\StoreRequest;
 use App\Http\Resources\Response\ErrorResponse;
 use App\Services\CartService;
-use App\Services\CheckoutService;
+use App\Services\Payment\PaymentFactory;
+use App\Services\Payment\PaypalService;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
-    /**
-     * @var CheckoutService
-     */
-    protected $checkoutService;
-
-    /**
-     * @param CheckoutService $checkoutService
-     */
-    public function __construct(CheckoutService $checkoutService)
-    {
-        $this->checkoutService = $checkoutService;
-    }
-
-    public function store(CartService $cartService)
+    public function store(StoreRequest $request, CartService $cartService)
     {
         try {
+            DB::beginTransaction();
             $carts = $cartService->getCartsBy(['user_id' => auth()->id()]);
-            $this->checkoutService->checkout($carts, auth()->id());
+            $paymentService = PaymentFactory::initialize(request('type'));
+            $checkoutArray = $paymentService->pay($carts);
+            DB::commit();
+            return response()->json($checkoutArray);
         } catch (\Throwable $t) {
+            DB::rollBack();
+            return response()->json(new ErrorResponse($t->getMessage()), 500);
+        }
+    }
+
+    public function executePayment(ExecutePaymentRequest $request, CartService $cartService, PaypalService $paypalService)
+    {
+        try {
+            DB::beginTransaction();
+            $carts = $cartService->getCartsBy(['user_id' => auth()->id()]);
+            $paypalService->executePayment($request->validated());
+            DB::commit();
+            return response()->json(['message' => 'checkout done successfully']);
+        } catch (\Throwable $t) {
+            DB::rollBack();
             return response()->json(new ErrorResponse($t->getMessage()), 500);
         }
     }
