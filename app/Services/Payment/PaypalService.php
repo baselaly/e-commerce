@@ -19,7 +19,7 @@ class PaypalService implements PaymentInterface
 
     public function __construct()
     {
-        $paypal_configuration = \Config::get('paypal');
+        $paypal_configuration = config('paypal');
         $this->_api_context = new ApiContext(new OAuthTokenCredential($paypal_configuration['client_id'], $paypal_configuration['secret']));
         $this->_api_context->setConfig($paypal_configuration['settings']);
     }

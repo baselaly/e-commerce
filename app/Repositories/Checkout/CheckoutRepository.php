@@ -3,9 +3,6 @@
 namespace App\Repositories\Checkout;
 
 use App\Models\Checkout;
-use App\QueryFilters\Checkout\IdFilter;
-use App\QueryFilters\Checkout\ProductFilter;
-use App\QueryFilters\Checkout\UserFilter;
 use Illuminate\Pipeline\Pipeline;
 
 class CheckoutRepository implements CheckoutInterfaceRepository
@@ -67,7 +64,7 @@ class CheckoutRepository implements CheckoutInterfaceRepository
     public function getAll(array $filters = [], int $perPage = 0)
     {
         $checkouts = app(Pipeline::class)
-            ->send($this->Checkout->query())
+            ->send($this->checkout->query())
             ->through([])
             ->thenReturn()
             ->latest();

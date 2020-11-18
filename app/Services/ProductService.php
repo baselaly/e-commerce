@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Repositories\Product\ProductInterfaceRepository;
-use Illuminate\Database\Eloquent\Collection;
 
 class ProductService
 {

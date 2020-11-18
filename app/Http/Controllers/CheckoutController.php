@@ -6,6 +6,7 @@ use App\Http\Requests\Checkout\ExecutePaymentRequest;
 use App\Http\Requests\Checkout\StoreRequest;
 use App\Http\Resources\Response\ErrorResponse;
 use App\Services\CartService;
+use App\Services\CheckoutService;
 use App\Services\Payment\PaymentFactory;
 use App\Services\Payment\PaypalService;
 use Illuminate\Support\Facades\DB;
@@ -27,14 +28,16 @@ class CheckoutController extends Controller
         }
     }
 
-    public function executePayment(ExecutePaymentRequest $request, CartService $cartService, PaypalService $paypalService)
+    public function executePayment(ExecutePaymentRequest $request, CheckoutService $checkoutService, CartService $cartService, PaypalService $paypalService)
     {
         try {
             DB::beginTransaction();
             $carts = $cartService->getCartsBy(['user_id' => auth()->id()]);
             $paypalService->executePayment($request->validated());
+            $checkoutData = ['user_id' => auth()->id(), 'type' => 'paypal', 'paid' => true];
+            $checkout = $checkoutService->createCheckout($checkoutData, $carts);
             DB::commit();
-            return response()->json(['message' => 'checkout done successfully']);
+            return response()->json(['checkout' => $checkout]);
         } catch (\Throwable $t) {
             DB::rollBack();
             return response()->json(new ErrorResponse($t->getMessage()), 500);
