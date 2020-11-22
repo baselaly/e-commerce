@@ -16,9 +16,9 @@ class CheckoutController extends Controller
     public function store(StoreRequest $request, CartService $cartService)
     {
         try {
-            DB::beginTransaction();
             $carts = $cartService->getCartsBy(['user_id' => auth()->id()]);
             $paymentService = PaymentFactory::initialize(request('type'));
+            DB::beginTransaction();
             $checkoutArray = $paymentService->pay($carts);
             DB::commit();
             return response()->json($checkoutArray);
@@ -31,8 +31,8 @@ class CheckoutController extends Controller
     public function executePayment(ExecutePaymentRequest $request, CheckoutService $checkoutService, CartService $cartService, PaypalService $paypalService)
     {
         try {
-            DB::beginTransaction();
             $carts = $cartService->getCartsBy(['user_id' => auth()->id()]);
+            DB::beginTransaction();
             $paypalService->executePayment($request->validated());
             $checkoutData = ['user_id' => auth()->id(), 'type' => 'paypal', 'paid' => true];
             $checkout = $checkoutService->createCheckout($checkoutData, $carts);
