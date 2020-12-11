@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\QueryFilters\Cart\IdFilter;
 use App\QueryFilters\Cart\ProductFilter;
 use App\QueryFilters\Cart\UserFilter;
+use App\QueryFilters\Cart\CreatedAtFilter;
 use Illuminate\Pipeline\Pipeline;
 
 class CartRepository implements CartInterfaceRepository
@@ -45,7 +46,8 @@ class CartRepository implements CartInterfaceRepository
             ->through([
                 new IdFilter($data),
                 new UserFilter($data),
-                new ProductFilter($data)
+                new ProductFilter($data),
+                new CreatedAtFilter($data)
             ])
             ->thenReturn()
             ->latest()->firstOrFail();
@@ -75,10 +77,12 @@ class CartRepository implements CartInterfaceRepository
             ->through([
                 new IdFilter($filters),
                 new UserFilter($filters),
-                new ProductFilter($filters)
+                new ProductFilter($filters),
+                new CreatedAtFilter($filters)
             ])
             ->thenReturn()
             ->latest();
+
         return $perPage ? $carts->paginate($perPage) : $carts->get();
     }
 
