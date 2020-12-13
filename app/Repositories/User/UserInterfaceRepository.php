@@ -8,22 +8,27 @@ interface UserInterfaceRepository
 {
     /**
      * @param array $data
-     * 
+     *
      * @return User
      */
     public function create(array $data): User;
 
     /**
      * @param array $data
-     * 
+     *
      * @return User
      */
     public function getSingleBy(array $data): User;
 
     /**
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(User $user, array $data): bool;
+
+    /**
+     * @return array
+     */
+    public function filters(array $filters): array;
 }

@@ -8,14 +8,14 @@ interface CartInterfaceRepository
 {
     /**
      * @param array $data
-     * 
+     *
      * @return Cart
      */
     public function create(array $data): Cart;
 
     /**
      * @param array $data
-     * 
+     *
      * @return Cart
      */
     public function getSingleBy(array $data): Cart;
@@ -23,7 +23,7 @@ interface CartInterfaceRepository
     /**
      * @param Cart $cart
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(Cart $cart, array $data): bool;
@@ -31,15 +31,20 @@ interface CartInterfaceRepository
     /**
      * @param array $filters
      * @param int $perPage
-     * 
+     *
      * @return [type]
      */
     public function getAll(array $filters = [], int $perPage = 0);
 
     /**
      * @param Cart $cart
-     * 
+     *
      * @return bool
      */
     public function delete(Cart $cart): bool;
+
+    /**
+     * @return array
+     */
+    public function filters(array $filters): array;
 }

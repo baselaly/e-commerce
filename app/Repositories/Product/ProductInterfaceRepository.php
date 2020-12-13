@@ -8,14 +8,14 @@ interface ProductInterfaceRepository
 {
     /**
      * @param array $data
-     * 
+     *
      * @return Product
      */
     public function create(array $data): Product;
 
     /**
      * @param array $data
-     * 
+     *
      * @return Product
      */
     public function getSingleBy(array $data): Product;
@@ -23,7 +23,7 @@ interface ProductInterfaceRepository
     /**
      * @param Product $product
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(Product $product, array $data): bool;
@@ -31,8 +31,13 @@ interface ProductInterfaceRepository
     /**
      * @param array $filters
      * @param int $perPage
-     * 
+     *
      * @return [type]
      */
     public function getAll(array $filters = [], int $perPage = 0);
+
+    /**
+     * @return array
+     */
+    public function filters(array $filters): array;
 }

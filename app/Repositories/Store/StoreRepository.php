@@ -23,8 +23,21 @@ class StoreRepository implements StoreInterfaceRepository
     }
 
     /**
+     * filters
+     *
+     * @return array
+     */
+    public function filters(array $filters): array
+    {
+        return [
+            new UserIdFilter($filters),
+            new IdFilter($filters),
+        ];
+    }
+
+    /**
      * @param array $data
-     * 
+     *
      * @return Store
      */
     public function create(array $data): Store
@@ -39,10 +52,7 @@ class StoreRepository implements StoreInterfaceRepository
     {
         return app(Pipeline::class)
             ->send($this->store->query())
-            ->through([
-                new UserIdFilter($data),
-                new IdFilter($data)
-            ])
+            ->through($this->filters($data))
             ->thenReturn()
             ->firstOrFail();
     }
@@ -50,7 +60,7 @@ class StoreRepository implements StoreInterfaceRepository
     /**
      * @param Store $store
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(Store $store, array $data): bool
@@ -61,17 +71,14 @@ class StoreRepository implements StoreInterfaceRepository
     /**
      * @param array $filters
      * @param int $paginate
-     * 
+     *
      * @return [type]
      */
     public function getAll(array $filters = [], int $perPage = 0)
     {
         $stores = app(Pipeline::class)
             ->send($this->store->query())
-            ->through([
-                new UserIdFilter($filters),
-                new IdFilter($filters)
-            ])
+            ->through($this->filters($filters))
             ->thenReturn()
             ->latest();
 

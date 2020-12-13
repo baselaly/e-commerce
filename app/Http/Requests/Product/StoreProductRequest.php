@@ -31,15 +31,15 @@ class StoreProductRequest extends FormRequest
             'description' => 'required|max:1000',
             'quantity' => 'required|integer|min:1|digits_between:1,2',
             'price' => 'required|numeric',
-            'images' => 'required|array|min:1',
+            'images' => 'required|array|min:1|max:5',
             'images.*' => 'required|image|mimes:png,jpg,jpeg|max:5000',
-            'thumbnail' => 'required|image|mimes:png,jpg,jpeg|max:5000'
+            'thumbnail' => 'required|image|mimes:png,jpg,jpeg|max:5000',
+            'type' => 'required|in:store,user',
         ];
 
         // for user UI validation
         if (request()->route()->getName() === "products.store") {
-            request('type') == 'store' ? $rules['store_id'] = 'required|exists:stores,id,user_id,' . auth()->id() : '';
-            $rules['type'] = 'required|in:store,user';
+            request('type') === 'store' ? $rules['store_id'] = 'required|exists:stores,id,user_id,' . auth()->id() : '';
         }
 
         return $rules;

@@ -3,10 +3,10 @@
 namespace App\Repositories\Cart;
 
 use App\Models\Cart;
+use App\QueryFilters\Cart\CreatedAtFilter;
 use App\QueryFilters\Cart\IdFilter;
 use App\QueryFilters\Cart\ProductFilter;
 use App\QueryFilters\Cart\UserFilter;
-use App\QueryFilters\Cart\CreatedAtFilter;
 use Illuminate\Pipeline\Pipeline;
 
 class CartRepository implements CartInterfaceRepository
@@ -25,8 +25,23 @@ class CartRepository implements CartInterfaceRepository
     }
 
     /**
+     * filters
+     *
+     * @return array
+     */
+    public function filters(array $filters): array
+    {
+        return [
+            new IdFilter($filters),
+            new UserFilter($filters),
+            new ProductFilter($filters),
+            new CreatedAtFilter($filters),
+        ];
+    }
+
+    /**
      * @param array $data
-     * 
+     *
      * @return Cart
      */
     public function create(array $data): Cart
@@ -36,19 +51,14 @@ class CartRepository implements CartInterfaceRepository
 
     /**
      * @param array $data
-     * 
+     *
      * @return Cart
      */
     public function getSingleBy(array $data): Cart
     {
         return app(Pipeline::class)
             ->send($this->cart->query())
-            ->through([
-                new IdFilter($data),
-                new UserFilter($data),
-                new ProductFilter($data),
-                new CreatedAtFilter($data)
-            ])
+            ->through($this->filters($data))
             ->thenReturn()
             ->latest()->firstOrFail();
     }
@@ -56,7 +66,7 @@ class CartRepository implements CartInterfaceRepository
     /**
      * @param Cart $Cart
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(Cart $cart, array $data): bool
@@ -67,19 +77,14 @@ class CartRepository implements CartInterfaceRepository
     /**
      * @param array $filters
      * @param int $paginate
-     * 
+     *
      * @return [type]
      */
     public function getAll(array $filters = [], int $perPage = 0)
     {
         $carts = app(Pipeline::class)
             ->send($this->cart->query())
-            ->through([
-                new IdFilter($filters),
-                new UserFilter($filters),
-                new ProductFilter($filters),
-                new CreatedAtFilter($filters)
-            ])
+            ->through($this->filters($filters))
             ->thenReturn()
             ->latest();
 
@@ -88,7 +93,7 @@ class CartRepository implements CartInterfaceRepository
 
     /**
      * @param Cart $cart
-     * 
+     *
      * @return bool
      */
     public function delete(Cart $cart): bool

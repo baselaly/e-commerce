@@ -22,21 +22,31 @@ class ProductImageRepository implements ProductImageInterfaceRepository
         $this->productImage = $productImage;
     }
 
+    /**
+     * filters
+     *
+     * @return array
+     */
+    public function filters(array $filters): array
+    {
+        return [
+            new IdFilter($filters),
+            new OwnerFilter($filters),
+        ];
+    }
+
     public function getSingleBy(array $data): ProductImage
     {
         return app(Pipeline::class)
             ->send($this->productImage->query())
-            ->through([
-                new IdFilter($data),
-                new OwnerFilter($data)
-            ])
+            ->through($this->filters($data))
             ->thenReturn()
             ->firstOrFail();
     }
 
     /**
      * @param ProductImage $productImage
-     * 
+     *
      * @return bool
      */
     public function delete(ProductImage $productImage): bool

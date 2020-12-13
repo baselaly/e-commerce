@@ -21,8 +21,19 @@ class CheckoutRepository implements CheckoutInterfaceRepository
     }
 
     /**
+     * filters
+     *
+     * @return array
+     */
+    public function filters(array $filters): array
+    {
+        return [
+        ];
+    }
+
+    /**
      * @param array $data
-     * 
+     *
      * @return Checkout
      */
     public function create(array $data): Checkout
@@ -32,14 +43,14 @@ class CheckoutRepository implements CheckoutInterfaceRepository
 
     /**
      * @param array $data
-     * 
+     *
      * @return Checkout
      */
     public function getSingleBy(array $data): Checkout
     {
         return app(Pipeline::class)
             ->send($this->checkout->query())
-            ->through([])
+            ->through($this->filters($data))
             ->thenReturn()
             ->latest()->firstOrFail();
     }
@@ -47,7 +58,7 @@ class CheckoutRepository implements CheckoutInterfaceRepository
     /**
      * @param Checkout $checkout
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(Checkout $checkout, array $data): bool
@@ -58,14 +69,14 @@ class CheckoutRepository implements CheckoutInterfaceRepository
     /**
      * @param array $filters
      * @param int $paginate
-     * 
+     *
      * @return [type]
      */
     public function getAll(array $filters = [], int $perPage = 0)
     {
         $checkouts = app(Pipeline::class)
             ->send($this->checkout->query())
-            ->through([])
+            ->through($this->filters($filters))
             ->thenReturn()
             ->latest();
         return $perPage ? $checkouts->paginate($perPage) : $checkouts->get();
@@ -73,7 +84,7 @@ class CheckoutRepository implements CheckoutInterfaceRepository
 
     /**
      * @param Checkout $checkout
-     * 
+     *
      * @return bool
      */
     public function delete(Checkout $checkout): bool

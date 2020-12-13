@@ -23,8 +23,21 @@ class UserRepository implements UserInterfaceRepository
     }
 
     /**
+     * filters
+     *
+     * @return array
+     */
+    public function filters(array $filters): array
+    {
+        return [
+            new CodeFilter($filters),
+            new EmailFilter($filters),
+        ];
+    }
+
+    /**
      * @param array $data
-     * 
+     *
      * @return User
      */
     public function create(array $data): User
@@ -39,10 +52,7 @@ class UserRepository implements UserInterfaceRepository
     {
         return app(Pipeline::class)
             ->send($this->user->query())
-            ->through([
-                new CodeFilter($data),
-                new EmailFilter($data)
-            ])
+            ->through($this->filters($data))
             ->thenReturn()
             ->firstOrFail();
     }
@@ -50,7 +60,7 @@ class UserRepository implements UserInterfaceRepository
     /**
      * @param string $id
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(User $user, array $data): bool

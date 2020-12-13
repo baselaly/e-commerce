@@ -20,7 +20,7 @@ class Store extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'address', 'phone', 'logo'
+        'user_id', 'name', 'address', 'phone', 'logo',
     ];
 
     public function setNameAttribute($value)
@@ -84,5 +84,15 @@ class Store extends Model
     public function products(): MorphMany
     {
         return $this->morphMany('App\Models\Product', 'ownerable');
+    }
+    
+    /**
+     * likes
+     *
+     * @return MorphMany
+     */
+    public function likes(): MorphMany
+    {
+        return $this->morphMany('App\Models\Like', 'likeable');
     }
 }

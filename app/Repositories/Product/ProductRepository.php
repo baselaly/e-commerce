@@ -26,8 +26,24 @@ class ProductRepository implements ProductInterfaceRepository
     }
 
     /**
+     * filters
+     *
+     * @return array
+     */
+    public function filters(array $filters): array
+    {
+        return [
+            new IdFilter($filters),
+            new OwnerFilter($filters),
+            new StoreFilter($filters),
+            new ActiveFilter($filters),
+            new UserFilter($filters),
+        ];
+    }
+
+    /**
      * @param array $data
-     * 
+     *
      * @return Product
      */
     public function create(array $data): Product
@@ -37,20 +53,14 @@ class ProductRepository implements ProductInterfaceRepository
 
     /**
      * @param array $data
-     * 
+     *
      * @return Product
      */
     public function getSingleBy(array $data): Product
     {
         return app(Pipeline::class)
             ->send($this->product->query())
-            ->through([
-                new IdFilter($data),
-                new OwnerFilter($data),
-                new StoreFilter($data),
-                new ActiveFilter($data),
-                new UserFilter($data)
-            ])
+            ->through($this->filters($data))
             ->thenReturn()
             ->latest()->firstOrFail();
     }
@@ -58,7 +68,7 @@ class ProductRepository implements ProductInterfaceRepository
     /**
      * @param Product $product
      * @param array $data
-     * 
+     *
      * @return bool
      */
     public function update(Product $product, array $data): bool
@@ -69,20 +79,14 @@ class ProductRepository implements ProductInterfaceRepository
     /**
      * @param array $filters
      * @param int $paginate
-     * 
+     *
      * @return [type]
      */
     public function getAll(array $filters = [], int $perPage = 0)
     {
         $products = app(Pipeline::class)
             ->send($this->product->query())
-            ->through([
-                new IdFilter($filters),
-                new OwnerFilter($filters),
-                new StoreFilter($filters),
-                new ActiveFilter($filters),
-                new UserFilter($filters)
-            ])
+            ->through($this->filters($filters))
             ->thenReturn()
             ->latest();
 

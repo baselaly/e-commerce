@@ -6,6 +6,8 @@ use App\Repositories\Cart\CartInterfaceRepository;
 use App\Repositories\Cart\CartRepository;
 use App\Repositories\Checkout\CheckoutInterfaceRepository;
 use App\Repositories\Checkout\CheckoutRepository;
+use App\Repositories\Like\LikeInterfaceRepository;
+use App\Repositories\Like\LikeRepository;
 use App\Repositories\Product\ProductInterfaceRepository;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\ProductImage\ProductImageInterfaceRepository;
@@ -31,6 +33,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProductImageInterfaceRepository::class, ProductImageRepository::class);
         $this->app->bind(CartInterfaceRepository::class, CartRepository::class);
         $this->app->bind(CheckoutInterfaceRepository::class, CheckoutRepository::class);
+        $this->app->bind(LikeInterfaceRepository::class, LikeRepository::class);
     }
 
     /**

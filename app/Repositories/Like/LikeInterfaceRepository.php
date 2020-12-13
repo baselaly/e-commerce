@@ -1,32 +1,32 @@
 <?php
 
-namespace App\Repositories\Checkout;
+namespace App\Repositories\Like;
 
-use App\Models\Checkout;
+use App\Models\Like;
 
-interface CheckoutInterfaceRepository
+interface LikeInterfaceRepository
 {
     /**
      * @param array $data
      *
-     * @return Checkout
+     * @return Like
      */
-    public function create(array $data): Checkout;
+    public function create(array $data): Like;
 
     /**
      * @param array $data
      *
-     * @return Checkout
+     * @return Like
      */
-    public function getSingleBy(array $data): Checkout;
+    public function getSingleBy(array $data): Like;
 
     /**
-     * @param Checkout $checkout
+     * @param Like $Like
      * @param array $data
      *
      * @return bool
      */
-    public function update(Checkout $checkout, array $data): bool;
+    public function update(Like $Like, array $data): bool;
 
     /**
      * @param array $filters
@@ -37,11 +37,12 @@ interface CheckoutInterfaceRepository
     public function getAll(array $filters = [], int $perPage = 0);
 
     /**
-     * @param Checkout $checkout
+     * delete
      *
+     * @param Like $like
      * @return bool
      */
-    public function delete(Checkout $checkout): bool;
+    public function delete(Like $like): bool;
 
     /**
      * @return array

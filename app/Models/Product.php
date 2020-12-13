@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as Image;
@@ -21,7 +22,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'active', 'quantity', 'price', 'ownerable_type', 'ownerable_id', 'thumbnail', 'featured'
+        'name', 'description', 'active', 'quantity', 'price', 'ownerable_type', 'ownerable_id', 'thumbnail', 'featured',
     ];
 
     /**
@@ -30,7 +31,7 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'active' => 'boolean', 'quantity' => 'integer', 'price' => 'float', 'featured' => 'boolean'
+        'active' => 'boolean', 'quantity' => 'integer', 'price' => 'float', 'featured' => 'boolean',
     ];
 
     public function setNameAttribute($value)
@@ -104,5 +105,15 @@ class Product extends Model
     public function images(): HasMany
     {
         return $this->hasMany('App\Models\ProductImage');
+    }
+    
+    /**
+     * likes
+     *
+     * @return MorphMany
+     */
+    public function likes(): MorphMany
+    {
+        return $this->morphMany('App\Models\Like', 'likeable');
     }
 }
