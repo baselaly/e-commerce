@@ -1,0 +1,4 @@
+{
+    "intelephense.environment.phpVersion": "8.0.0",
+    "php.validate.executablePath": "/opt/lampp/php/man/man1/php.phar.1",
+}

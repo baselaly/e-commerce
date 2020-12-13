@@ -183,7 +183,10 @@ return [
 
         "Tymon\JWTAuth\Providers\LaravelServiceProvider",
 
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+
+        // package provider
+        Basel\RepositoryPipeline\RepositoryPipelineProvider::class,
     ],
 
     /*
