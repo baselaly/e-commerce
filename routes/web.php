@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Product;
-use Basel\RepositoryPipeline\Repository;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,5 +14,5 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    return Repository::get(Product::class, ['id' => '2cca5c78-2af3-4bd9-9bd3-a1ded2350b6f'], $perPage = 1);
+    return view('welcome');
 });
