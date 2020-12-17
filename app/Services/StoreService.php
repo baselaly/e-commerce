@@ -21,8 +21,8 @@ class StoreService
     }
 
     /**
-     * @param string $userId
-     * 
+     * @param array $data
+     *
      * @return Store
      */
     public function createStore(array $data): Store
@@ -32,7 +32,7 @@ class StoreService
 
     /**
      * @param array $data
-     * 
+     *
      * @return Store
      */
     public function getSingleStoreBy(array $data = []): Store
@@ -43,7 +43,7 @@ class StoreService
     /**
      * @param Store $store
      * @param array $data
-     * 
+     *
      * @return Store
      */
     public function updateStore(Store $store, array $data): Store
@@ -56,7 +56,7 @@ class StoreService
     /**
      * @param array $filters
      * @param int $paginate
-     * 
+     *
      * @return [type]
      */
     public function getStores(array $filters = [], int $perPage = 10)
