@@ -106,7 +106,7 @@ class Product extends Model
     {
         return $this->hasMany('App\Models\ProductImage');
     }
-    
+
     /**
      * likes
      *
@@ -115,5 +115,15 @@ class Product extends Model
     public function likes(): MorphMany
     {
         return $this->morphMany('App\Models\Like', 'likeable');
+    }
+
+    /**
+     * reviews
+     *
+     * @return MorphMany
+     */
+    public function reviews(): MorphMany
+    {
+        return $this->morphMany('App\Models\Review', 'reviewable');
     }
 }

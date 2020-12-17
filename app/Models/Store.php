@@ -85,7 +85,7 @@ class Store extends Model
     {
         return $this->morphMany('App\Models\Product', 'ownerable');
     }
-    
+
     /**
      * likes
      *
@@ -94,5 +94,15 @@ class Store extends Model
     public function likes(): MorphMany
     {
         return $this->morphMany('App\Models\Like', 'likeable');
+    }
+
+    /**
+     * reviews
+     *
+     * @return MorphMany
+     */
+    public function reviews(): MorphMany
+    {
+        return $this->morphMany('App\Models\Review', 'reviewable');
     }
 }
