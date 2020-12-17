@@ -35,9 +35,15 @@ class ReviewController extends Controller
      */
     public function reviewProduct(ProductReviewRequest $request)
     {
+        $reviewData = ['user_id' => auth()->id(), 'reviewable_id' => request('product_id'), 'reviewable_type' => 'App\Models\Product'];
         try {
-        } catch (\Throwable$t) {
-            return response()->json(new ErrorResponse($t->getMessage()), 500);
+            $this->reviewService->getSingleReview($reviewData);
+            return response()->json(new ErrorResponse('You Already Have Review on this product!'), 400);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException$e) {
+            $review = $this->reviewService->create($reviewData);
+            return response()->json(['review' => $review], 200);
+        } catch (\Throwable$e) {
+            return response()->json(new ErrorResponse($e->getMessage()), 500);
         }
     }
 
@@ -49,10 +55,15 @@ class ReviewController extends Controller
      */
     public function reviewStore(StoreReviewRequest $request)
     {
+        $reviewData = ['user_id' => auth()->id(), 'reviewable_id' => request('store_id'), 'reviewable_type' => 'App\Models\Store'];
         try {
-
-        } catch (\Throwable$t) {
-            return response()->json(new ErrorResponse($t->getMessage()), 500);
+            $this->reviewService->getSingleReview($reviewData);
+            return response()->json(new ErrorResponse('You Already Have Review on this store!'), 400);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException$e) {
+            $review = $this->reviewService->create($reviewData);
+            return response()->json(['review' => $review], 200);
+        } catch (\Throwable$e) {
+            return response()->json(new ErrorResponse($e->getMessage()), 500);
         }
     }
 }

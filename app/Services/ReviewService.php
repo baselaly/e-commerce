@@ -31,8 +31,19 @@ class ReviewService
      * @param array $data
      * @return Review
      */
-    public function createReview(array $data): Review
+    public function create(array $data): Review
     {
         return $this->reviewRepo->create($data);
+    }
+
+    /**
+     * getSingleReview
+     *
+     * @param array $filters
+     * @return Review
+     */
+    public function getSingleReview(array $filters = []): Review
+    {
+        return $this->reviewRepo->getSingleBy($filters);
     }
 }

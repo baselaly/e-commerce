@@ -22,6 +22,13 @@ interface ReviewInterfaceRepository
     public function getAll(array $filters = [], int $perPage = 0);
 
     /**
+     * @param array $data
+     *
+     * @return Review
+     */
+    public function getSingleBy(array $data): Review;
+
+    /**
      * @return array
      */
     public function filters(array $filters): array;
