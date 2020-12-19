@@ -8,10 +8,12 @@ use App\Repositories\Checkout\CheckoutInterfaceRepository;
 use App\Repositories\Checkout\CheckoutRepository;
 use App\Repositories\Like\LikeInterfaceRepository;
 use App\Repositories\Like\LikeRepository;
-use App\Repositories\Product\ProductInterfaceRepository;
-use App\Repositories\Product\ProductRepository;
 use App\Repositories\ProductImage\ProductImageInterfaceRepository;
 use App\Repositories\ProductImage\ProductImageRepository;
+use App\Repositories\Product\ProductInterfaceRepository;
+use App\Repositories\Product\ProductRepository;
+use App\Repositories\Review\ReviewInterfaceRepository;
+use App\Repositories\Review\ReviewRepository;
 use App\Repositories\Store\StoreInterfaceRepository;
 use App\Repositories\Store\StoreRepository;
 use App\Repositories\User\UserInterfaceRepository;
@@ -34,6 +36,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CartInterfaceRepository::class, CartRepository::class);
         $this->app->bind(CheckoutInterfaceRepository::class, CheckoutRepository::class);
         $this->app->bind(LikeInterfaceRepository::class, LikeRepository::class);
+        $this->app->bind(ReviewInterfaceRepository::class, ReviewRepository::class);
     }
 
     /**

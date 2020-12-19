@@ -5,3 +5,4 @@ require 'Apis/product.php';
 require 'Apis/cart.php';
 require 'Apis/checkout.php';
 require 'Apis/like.php';
+require 'Apis/review.php';
